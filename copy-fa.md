@@ -97,3 +97,16 @@ tone, and promise nothing about the product. Edit them freely in the templates
 | Resend button | ارسال دوباره کد |
 | Back to the form | تغییر شماره |
 | Suggested SMS template (set in the Kavenegar panel) | کد تأیید همگام: %token |
+| Tag next to the price question (it may be skipped) | اختیاری |
+| Example card under the headline: its tag | مثال |
+| Example card: rate row, label and change | دلار، ۲٪ |
+| Example card: price row, label, the two prices and the unit | قیمت محصولت، ۱٬۲۵۰٬۰۰۰، ۱٬۲۷۵٬۰۰۰، تومن |
+| Example card: badge | خودکار به‌روز شد |
+| Example card: description read out by screen readers | مثال: دلار ۲٪ بالا می‌ره و قیمت محصولت خودکار از ۱٬۲۵۰٬۰۰۰ به ۱٬۲۷۵٬۰۰۰ تومن به‌روز می‌شه. |
+
+The example card is a picture of the headline: the rate moves, the price follows. It shows a
+percentage instead of a real exchange rate so it cannot go out of date, and it is tagged
+«مثال» so nobody reads it as a live price. It describes nothing the original copy does not.
+
+The page description and the link-preview title and text (`<meta>` tags in `fragments.html`)
+reuse the headline and subheadline word for word.

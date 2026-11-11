@@ -7,7 +7,7 @@ and confirm the number with an SMS code. An admin page shows the funnel per ad s
 The page says plainly that the product is not built yet. It has no invented features,
 testimonials or user counts. Its text lives in [copy-fa.md](copy-fa.md).
 
-- Java 25, Spring Boot 4, PostgreSQL, server-rendered HTML, about 60 lines of plain JavaScript
+- Java 25, Spring Boot 4, PostgreSQL, server-rendered HTML, about 100 lines of plain JavaScript
 - **Zero requests to other hosts**: self-hosted Vazirmatn font, no CDN, no analytics script.
   A strict Content-Security-Policy makes the browser enforce this, and a test checks it.
 - Tracking is first-party and server-side.
@@ -403,7 +403,9 @@ visitor ── CDN ── nginx ── app (Spring Boot) ── PostgreSQL
 phone, checks the limits, stores a hashed code and sends the SMS, then redirects to
 `/verify`. `POST /verify` checks the code and creates the signup. `POST /resend` issues a
 new code under the same limits. Everything works without JavaScript; the script only
-reports the first touch of the form and prevents double taps.
+reports the first touch of the form, prevents double taps, keeps a sign-up button at the
+bottom of small screens while the form is out of view, and submits the SMS code as soon as
+its six digits are in.
 
 **Phone numbers.** `۰۹۱۲…`, `٠٩١٢…`, `+98 912…`, `0098912…` and `912…` all become
 `09xxxxxxxxx`. Anything else is rejected.

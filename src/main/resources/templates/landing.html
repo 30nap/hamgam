@@ -1,78 +1,132 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
-<!-- All Persian text below is copied verbatim from copy-fa.md. Change both together. -->
+<!--
+  All Persian text below is copied verbatim from copy-fa.md. Change both together.
+  A line of the original copy must stay one unbroken piece of text: do not wrap part of it in a tag.
+-->
 <head th:replace="~{fragments :: head}"></head>
 <body>
-<main class="wrap">
-  <div class="brand"><span class="mark" aria-hidden="true"></span>همگام</div>
+<header class="hero">
+  <div class="in">
+    <div class="top">
+      <div class="brand"><span class="mark" aria-hidden="true"></span>همگام</div>
+      <a class="navlink" href="#form">پیش‌ثبت‌نام رایگان</a>
+    </div>
 
-  <h1>دلار رفت بالا؟ دیگه لازم نیست دونه‌دونه قیمت‌ها رو عوض کنی.</h1>
-  <p class="lead">«همگام» قیمت محصولاتت رو با نرخ دلار و سودی که خودت می‌خوای، خودکار به‌روز می‌کنه. هنوز داریم می‌سازیمش. الان فقط پیش‌ثبت‌نام می‌گیریم و کاملاً رایگانه.</p>
-  <a class="btn" href="#form">پیش‌ثبت‌نام رایگان</a>
-
-  <ul class="benefits">
-    <li>
-      <h2>۱. دیگه با قیمت دیروز نفروش</h2>
-      <p>هر محصول رو یه بار به دلار، درهم یا طلا وصل کن. نرخ که عوض شد، قیمتت خودش درست می‌شه.</p>
-    </li>
-    <li>
-      <h2>۲. اختیارش دست خودته</h2>
-      <p>خودت تعیین می‌کنی قیمت تا کجا بالا و پایین بره، چطور رُند بشه، و اگه خواستی قبل از اعمال تأییدش کنی.</p>
-    </li>
-    <li>
-      <h2>۳. لیست قیمت هر روز آماده‌ست</h2>
-      <p>هر روز یه لیست قیمت مرتب می‌گیری که مستقیم بفرستی تو کانال بله و ایتا یا برای مشتری‌های عمده‌ت.</p>
-    </li>
-  </ul>
-
-  <p class="offer">پیش‌ثبت‌نام رایگانه و هیچ پولی ازت نمی‌گیریم. پیش‌ثبت‌نامی‌ها اولین نفرایی‌ان که همگام رو امتحان می‌کنن.</p>
-
-  <section class="card" id="form">
-    <p>شماره‌ت رو بذار و بگو کجا می‌فروشی. نسخهٔ اول رو برای جایی می‌سازیم که بیشترین درخواست رو داشته باشه، و آماده که شد خبرت می‌کنیم.</p>
-
-    <form id="signup" th:action="@{/signup}" method="post" novalidate>
-      <input type="hidden" name="v" th:value="${visitId}">
-
-      <div class="err" role="alert" th:if="${error != null}">
-        <th:block th:switch="${error}">
-          <span th:case="'phone'">شماره موبایل درست نیست. مثل ۰۹۱۲۳۴۵۶۷۸۹ واردش کن.</span>
-          <span th:case="'cooldown'">همین الان برات کد فرستادیم. یه دقیقه دیگه دوباره امتحان کن.</span>
-          <span th:case="'limit'">تعداد درخواست‌ها زیاد شد. چند ساعت دیگه دوباره امتحان کن.</span>
-          <span th:case="*">نتونستیم پیامک بفرستیم. چند دقیقه دیگه دوباره امتحان کن.</span>
-        </th:block>
+    <div class="hero-grid">
+      <div>
+        <h1>دلار رفت بالا؟ دیگه لازم نیست دونه‌دونه قیمت‌ها رو عوض کنی.</h1>
+        <p class="lead">«همگام» قیمت محصولاتت رو با نرخ دلار و سودی که خودت می‌خوای، خودکار به‌روز می‌کنه. هنوز داریم می‌سازیمش. الان فقط پیش‌ثبت‌نام می‌گیریم و کاملاً رایگانه.</p>
+        <a class="btn" id="cta" href="#form">پیش‌ثبت‌نام رایگان<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></a>
       </div>
 
-      <label class="field" for="phone">شماره موبایل</label>
-      <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="24"
-             placeholder="۰۹۱۲۳۴۵۶۷۸۹" required th:value="${phone}" th:autofocus="${error != null}">
-
-      <fieldset>
-        <legend>کجا می‌فروشی؟</legend>
-        <div class="chips">
-          <label class="chip"><input type="checkbox" name="platforms" value="woocommerce" th:checked="${platforms.contains('woocommerce')}"><span>ووکامرس</span></label>
-          <label class="chip"><input type="checkbox" name="platforms" value="basalam" th:checked="${platforms.contains('basalam')}"><span>باسلام</span></label>
-          <label class="chip"><input type="checkbox" name="platforms" value="digikala" th:checked="${platforms.contains('digikala')}"><span>دیجی‌کالا</span></label>
-          <label class="chip"><input type="checkbox" name="platforms" value="bale" th:checked="${platforms.contains('bale')}"><span>کانال بله</span></label>
-          <label class="chip"><input type="checkbox" name="platforms" value="eitaa" th:checked="${platforms.contains('eitaa')}"><span>کانال ایتا</span></label>
-          <label class="chip"><input type="checkbox" name="platforms" value="other" th:checked="${platforms.contains('other')}"><span>یه جای دیگه</span></label>
+      <!-- An illustration of the headline, marked as an example. Its text is listed in copy-fa.md. -->
+      <div class="demo" role="img" aria-label="مثال: دلار ۲٪ بالا می‌ره و قیمت محصولت خودکار از ۱٬۲۵۰٬۰۰۰ به ۱٬۲۷۵٬۰۰۰ تومن به‌روز می‌شه.">
+        <span class="tag">مثال</span>
+        <div class="row">
+          <span class="k">دلار</span>
+          <svg class="spark" viewBox="0 0 120 36">
+            <path class="base" d="M3 29l14-3 12 3 14-4 15 2"/>
+            <path class="rise" pathLength="1" d="M58 27l14-8 12 3 14-11 16-6"/>
+            <circle class="dot" cx="114" cy="5" r="4"/>
+          </svg>
+          <span class="chg"><svg viewBox="0 0 10 10"><path d="M5 1l4.5 8h-9z"/></svg>۲٪</span>
         </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>اگه همگام ماهی حدود ۳۰۰ هزار تومن باشه، ازش استفاده می‌کنی؟</legend>
-        <div class="chips">
-          <label class="chip"><input type="radio" name="price" value="yes" th:checked="${price == 'yes'}"><span>آره، حتماً</span></label>
-          <label class="chip"><input type="radio" name="price" value="maybe" th:checked="${price == 'maybe'}"><span>شاید</span></label>
-          <label class="chip"><input type="radio" name="price" value="no" th:checked="${price == 'no'}"><span>نه، گرونه</span></label>
+        <div class="row">
+          <span class="k">قیمت محصولت</span>
+          <span class="val"><span class="win"><span class="roll"><b>۱٬۲۵۰٬۰۰۰</b><b>۱٬۲۷۵٬۰۰۰</b></span></span>تومن</span>
         </div>
-      </fieldset>
+        <span class="ok"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>خودکار به‌روز شد</span>
+      </div>
+    </div>
+  </div>
+</header>
 
-      <button class="btn" type="submit">پیش‌ثبت‌نام رایگان</button>
-    </form>
+<main>
+  <section class="in benefits-sec">
+    <ul class="benefits">
+      <li>
+        <span class="ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.1 0l-3 3A5 5 0 0 0 11 21.1l1.5-1.5"/></svg></span>
+        <div>
+          <h2>۱. دیگه با قیمت دیروز نفروش</h2>
+          <p>هر محصول رو یه بار به دلار، درهم یا طلا وصل کن. نرخ که عوض شد، قیمتت خودش درست می‌شه.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h8m6 0h2M4 12h2m6 0h8M4 18h6m6 0h4"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="13" cy="18" r="2.5"/></svg></span>
+        <div>
+          <h2>۲. اختیارش دست خودته</h2>
+          <p>خودت تعیین می‌کنی قیمت تا کجا بالا و پایین بره، چطور رُند بشه، و اگه خواستی قبل از اعمال تأییدش کنی.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h7"/><path d="M4 6h.01M4 12h.01M4 18h.01" stroke-width="3"/></svg></span>
+        <div>
+          <h2>۳. لیست قیمت هر روز آماده‌ست</h2>
+          <p>هر روز یه لیست قیمت مرتب می‌گیری که مستقیم بفرستی تو کانال بله و ایتا یا برای مشتری‌های عمده‌ت.</p>
+        </div>
+      </li>
+    </ul>
   </section>
 
-  <footer>همگام هنوز منتشر نشده. شماره‌ت فقط برای خبر دادن زمان انتشار استفاده می‌شه.</footer>
+  <section class="signup" id="form">
+    <div class="in">
+      <div class="signup-grid">
+        <div class="pitch">
+          <p class="offer"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/><path d="M12 8S10.5 3 8 3a2.5 2.5 0 0 0 0 5zm0 0s1.5-5 4-5a2.5 2.5 0 0 1 0 5z"/></svg>پیش‌ثبت‌نام رایگانه و هیچ پولی ازت نمی‌گیریم. پیش‌ثبت‌نامی‌ها اولین نفرایی‌ان که همگام رو امتحان می‌کنن.</p>
+          <p class="intro">شماره‌ت رو بذار و بگو کجا می‌فروشی. نسخهٔ اول رو برای جایی می‌سازیم که بیشترین درخواست رو داشته باشه، و آماده که شد خبرت می‌کنیم.</p>
+        </div>
+
+        <div class="card">
+          <form id="signup" th:action="@{/signup}" method="post" novalidate>
+            <input type="hidden" name="v" th:value="${visitId}">
+
+            <div class="err" role="alert" th:if="${error != null}">
+              <th:block th:switch="${error}">
+                <span th:case="'phone'">شماره موبایل درست نیست. مثل ۰۹۱۲۳۴۵۶۷۸۹ واردش کن.</span>
+                <span th:case="'cooldown'">همین الان برات کد فرستادیم. یه دقیقه دیگه دوباره امتحان کن.</span>
+                <span th:case="'limit'">تعداد درخواست‌ها زیاد شد. چند ساعت دیگه دوباره امتحان کن.</span>
+                <span th:case="*">نتونستیم پیامک بفرستیم. چند دقیقه دیگه دوباره امتحان کن.</span>
+              </th:block>
+            </div>
+
+            <label class="field" for="phone">شماره موبایل</label>
+            <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="24"
+                   placeholder="۰۹۱۲۳۴۵۶۷۸۹" required th:value="${phone}" th:autofocus="${error != null}">
+
+            <fieldset>
+              <legend>کجا می‌فروشی؟</legend>
+              <div class="chips">
+                <label class="chip"><input type="checkbox" name="platforms" value="woocommerce" th:checked="${platforms.contains('woocommerce')}"><span>ووکامرس</span></label>
+                <label class="chip"><input type="checkbox" name="platforms" value="basalam" th:checked="${platforms.contains('basalam')}"><span>باسلام</span></label>
+                <label class="chip"><input type="checkbox" name="platforms" value="digikala" th:checked="${platforms.contains('digikala')}"><span>دیجی‌کالا</span></label>
+                <label class="chip"><input type="checkbox" name="platforms" value="bale" th:checked="${platforms.contains('bale')}"><span>کانال بله</span></label>
+                <label class="chip"><input type="checkbox" name="platforms" value="eitaa" th:checked="${platforms.contains('eitaa')}"><span>کانال ایتا</span></label>
+                <label class="chip"><input type="checkbox" name="platforms" value="other" th:checked="${platforms.contains('other')}"><span>یه جای دیگه</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>اگه همگام ماهی حدود ۳۰۰ هزار تومن باشه، ازش استفاده می‌کنی؟ <span class="opt">اختیاری</span></legend>
+              <div class="chips three">
+                <label class="chip"><input type="radio" name="price" value="yes" th:checked="${price == 'yes'}"><span>آره، حتماً</span></label>
+                <label class="chip"><input type="radio" name="price" value="maybe" th:checked="${price == 'maybe'}"><span>شاید</span></label>
+                <label class="chip"><input type="radio" name="price" value="no" th:checked="${price == 'no'}"><span>نه، گرونه</span></label>
+              </div>
+            </fieldset>
+
+            <button class="btn" type="submit">پیش‌ثبت‌نام رایگان<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></button>
+          </form>
+        </div>
+      </div>
+
+      <footer><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>همگام هنوز منتشر نشده. شماره‌ت فقط برای خبر دادن زمان انتشار استفاده می‌شه.</span></footer>
+    </div>
+  </section>
 </main>
+
+<!-- Shown by app.js on small screens while neither the first button nor the form is in view. -->
+<div class="dock" id="dock"><a class="btn" href="#form">پیش‌ثبت‌نام رایگان<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></a></div>
 <script th:src="@{/js/app.js}" defer></script>
 </body>
 </html>

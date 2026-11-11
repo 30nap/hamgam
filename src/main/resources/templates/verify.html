@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head}"></head>
-<body>
-<main class="wrap">
-  <div class="brand"><span class="mark" aria-hidden="true"></span>همگام</div>
+<body class="solo">
+<main class="in">
+  <div class="top">
+    <div class="brand"><span class="mark" aria-hidden="true"></span>همگام</div>
+  </div>
 
   <section class="card">
-    <p>کدی که برات پیامک شد رو بزن.</p>
+    <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>
+    <p class="say"><span class="ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-width="3"/></svg></span>کدی که برات پیامک شد رو بزن.</p>
 
     <form th:action="@{/verify}" method="post" novalidate>
       <input type="hidden" name="r" th:value="${requestId}">
@@ -37,7 +40,7 @@
     </div>
   </section>
 
-  <footer>همگام هنوز منتشر نشده. شماره‌ت فقط برای خبر دادن زمان انتشار استفاده می‌شه.</footer>
+  <footer><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>همگام هنوز منتشر نشده. شماره‌ت فقط برای خبر دادن زمان انتشار استفاده می‌شه.</span></footer>
 </main>
 <script th:src="@{/js/app.js}" defer></script>
 </body>
