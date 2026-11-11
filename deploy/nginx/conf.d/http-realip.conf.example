@@ -1,0 +1,12 @@
+# Copy to http-realip.conf when a CDN (e.g. ArvanCloud) sits in front of this server.
+#
+# Without this, every visitor appears to come from the CDN's own addresses, so the per-IP
+# OTP limit would treat the whole country as one visitor.
+#
+# List ONLY your CDN's edge ranges, taken from the provider's current published list.
+# The range below is a placeholder, not a real value. Never use 0.0.0.0/0: that would let
+# anyone forge their address.
+
+real_ip_header X-Forwarded-For;
+real_ip_recursive on;
+# set_real_ip_from 192.0.2.0/24;   # <- replace with the CDN's ranges, one line each

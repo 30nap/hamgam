@@ -1,0 +1,15 @@
+target/
+.env
+*.log
+*.tar
+*.tar.gz
+
+# Server-specific nginx snippets (copied from the .example files)
+deploy/nginx/conf.d/*.conf
+
+# IDE and tooling
+.idea/
+*.iml
+.vscode/
+.claude/
+.DS_Store

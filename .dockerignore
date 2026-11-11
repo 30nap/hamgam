@@ -1,0 +1,10 @@
+target/
+.git/
+.env
+.idea/
+.vscode/
+.claude/
+deploy/
+*.md
+*.tar
+*.tar.gz

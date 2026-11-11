@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Hamgam admin</title>
+<style>
+body{margin:0;padding:1.5rem;font:15px/1.5 system-ui,"Segoe UI",Tahoma,sans-serif;color:#16211e;background:#f7f5ef}
+h1{margin:0 0 .3rem;font-size:1.4rem}
+h2{margin:2rem 0 .5rem;font-size:1.05rem}
+p{margin:.3rem 0;color:#55625d}
+a{color:#0b5d4e}
+.scroll{overflow-x:auto;background:#fff;border:1px solid #dedacd;border-radius:.6rem}
+table{border-collapse:collapse;width:100%;white-space:nowrap}
+th,td{padding:.5rem .8rem;border-bottom:1px solid #eeeadf;text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{background:#f1eee4;font-size:.85rem}
+tfoot td{font-weight:700;border-top:2px solid #dedacd;border-bottom:0}
+ul{margin:.4rem 0;padding-left:1.2rem;color:#55625d}
+</style>
+</head>
+<body>
+<h1>Hamgam pre-registration</h1>
+<p>Funnel per <code>utm_source</code>. Download: <a th:href="@{/admin/stats.csv}">this table (CSV)</a> ·
+   <a th:href="@{/admin/signups.csv}">all verified signups (CSV)</a></p>
+
+<h2>Funnel</h2>
+<div class="scroll">
+<table>
+  <thead>
+  <tr>
+    <th>utm_source</th><th>Views</th><th>Visitors</th><th>Form starts</th><th>Codes sent</th>
+    <th>Verified signups</th><th>Price reservations</th>
+    <th>Start rate</th><th>Signup rate</th><th>Completion</th><th>Reservation rate</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="row : ${rows}">
+    <td th:text="${row.source()}">source</td>
+    <td th:text="${row.views()}">0</td>
+    <td th:text="${row.visitors()}">0</td>
+    <td th:text="${row.formStarts()}">0</td>
+    <td th:text="${row.codesSent()}">0</td>
+    <td th:text="${row.verified()}">0</td>
+    <td th:text="${row.priceYes()}">0</td>
+    <td th:text="${row.startRate()}">-</td>
+    <td th:text="${row.signupRate()}">-</td>
+    <td th:text="${row.completionRate()}">-</td>
+    <td th:text="${row.reservationRate()}">-</td>
+  </tr>
+  <tr th:if="${rows.isEmpty()}"><td colspan="11">No data yet.</td></tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td th:text="${total.source()}">Total</td>
+    <td th:text="${total.views()}">0</td>
+    <td th:text="${total.visitors()}">0</td>
+    <td th:text="${total.formStarts()}">0</td>
+    <td th:text="${total.codesSent()}">0</td>
+    <td th:text="${total.verified()}">0</td>
+    <td th:text="${total.priceYes()}">0</td>
+    <td th:text="${total.startRate()}">-</td>
+    <td th:text="${total.signupRate()}">-</td>
+    <td th:text="${total.completionRate()}">-</td>
+    <td th:text="${total.reservationRate()}">-</td>
+  </tr>
+  </tfoot>
+</table>
+</div>
+<ul>
+  <li><b>Views</b>: loads of the landing page. <b>Visitors</b>: distinct browsers (first-party cookie). Bots and prefetches are not counted.</li>
+  <li><b>Form starts</b>: visitors who touched the form. <b>Codes sent</b>: distinct phone numbers that were sent an SMS code.</li>
+  <li><b>Price reservations</b>: verified signups who answered "yes" to the price question.</li>
+  <li><b>Start rate</b> = form starts / visitors. <b>Signup rate</b> = verified / visitors.
+      <b>Completion</b> = verified / form starts. <b>Reservation rate</b> = reservations / verified.</li>
+  <li>A visitor is attributed to the most recent <code>utm_source</code> they arrived with; <code>(none)</code> means no UTM tag.</li>
+</ul>
+
+<h2>Price question (verified signups)</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>utm_source</th><th>Yes</th><th>Maybe</th><th>No</th><th>Not answered</th></tr></thead>
+  <tbody>
+  <tr th:each="row : ${rows}">
+    <td th:text="${row.source()}">source</td>
+    <td th:text="${row.priceYes()}">0</td>
+    <td th:text="${row.priceMaybe()}">0</td>
+    <td th:text="${row.priceNo()}">0</td>
+    <td th:text="${row.priceUnanswered()}">0</td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td th:text="${total.source()}">Total</td>
+    <td th:text="${total.priceYes()}">0</td>
+    <td th:text="${total.priceMaybe()}">0</td>
+    <td th:text="${total.priceNo()}">0</td>
+    <td th:text="${total.priceUnanswered()}">0</td>
+  </tr>
+  </tfoot>
+</table>
+</div>
+
+<h2>Where they sell (verified signups, multiple answers allowed)</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>utm_source</th><th th:each="key : ${platformKeys}" th:text="${key}">platform</th></tr></thead>
+  <tbody>
+  <tr th:each="row : ${rows}">
+    <td th:text="${row.source()}">source</td>
+    <td th:each="key : ${platformKeys}" th:text="${row.platform(key)}">0</td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td th:text="${total.source()}">Total</td>
+    <td th:each="key : ${platformKeys}" th:text="${total.platform(key)}">0</td>
+  </tr>
+  </tfoot>
+</table>
+</div>
+</body>
+</html>

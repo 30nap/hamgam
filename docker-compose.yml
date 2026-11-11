@@ -1,0 +1,63 @@
+# Hamgam landing page: app + PostgreSQL + nginx.
+# All configuration comes from .env (copy .env.example). Nothing secret lives in this file.
+#
+#   Build here:            docker compose up -d --build
+#   Pre-loaded images:     docker compose up -d --no-build     (see README, "Offline transfer")
+
+services:
+  postgres:
+    image: ${REGISTRY:-docker.io}/library/postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hamgam}
+      POSTGRES_USER: ${POSTGRES_USER:-hamgam}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    # Not published: only reachable from the other containers.
+
+  app:
+    image: hamgam-landing:${APP_VERSION:-latest}
+    build:
+      context: .
+      args:
+        REGISTRY: ${REGISTRY:-docker.io}
+        MAVEN_MIRROR_URL: ${MAVEN_MIRROR_URL:-}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-hamgam}
+      DB_USER: ${POSTGRES_USER:-hamgam}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:?set ADMIN_USERNAME in .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      SMS_PROVIDER: ${SMS_PROVIDER:-kavenegar}
+      KAVENEGAR_API_KEY: ${KAVENEGAR_API_KEY:-}
+      KAVENEGAR_OTP_TEMPLATE: ${KAVENEGAR_OTP_TEMPLATE:-}
+      OTP_HMAC_SECRET: ${OTP_HMAC_SECRET:?set OTP_HMAC_SECRET in .env}
+      OTP_IP_HOURLY_LIMIT: ${OTP_IP_HOURLY_LIMIT:-30}
+      OTP_PHONE_DAILY_LIMIT: ${OTP_PHONE_DAILY_LIMIT:-5}
+    # Not published: nginx is the only way in.
+
+  nginx:
+    image: ${REGISTRY:-docker.io}/library/nginx:stable-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./deploy/nginx/certs:/etc/nginx/certs:ro
+
+volumes:
+  pgdata:
