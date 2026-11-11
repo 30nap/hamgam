@@ -45,6 +45,8 @@ class SecurityConfig {
                 .csrf(csrf -> csrf.csrfTokenRepository(csrfTokens).ignoringRequestMatchers("/e/**"))
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp.policyDirectives(CONTENT_SECURITY_POLICY))
+                        // HSTS for this host only: other subdomains of the domain may still be HTTP-only.
+                        .httpStrictTransportSecurity(hsts -> hsts.includeSubDomains(false))
                         .referrerPolicy(referrer -> referrer.policy(ReferrerPolicy.SAME_ORIGIN)))
                 .exceptionHandling(errors -> errors.accessDeniedHandler((request, response, denied) -> {
                     if (denied instanceof CsrfException) {

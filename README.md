@@ -72,6 +72,7 @@ to `.env` and fill it in. `.env` is git-ignored.
 | `OTP_PHONE_COOLDOWN` | no (60s) | Minimum gap between two codes to one phone |
 | `OTP_TTL` | no (2m) | How long a code is valid |
 | `OTP_MAX_ATTEMPTS` | no (5) | Wrong guesses allowed per code |
+| `HTTP_PORT`, `HTTPS_PORT` | no (80, 443) | Host ports nginx is published on. Change only for local testing |
 | `APP_VERSION` | no (latest) | Tag of the app image |
 | `REGISTRY` | no (docker.io) | Registry host for base images (set to a mirror if Docker Hub is blocked) |
 | `MAVEN_MIRROR_URL` | no | Maven repository mirror, used only while building the image |
@@ -259,7 +260,14 @@ In `.env` (next step) set `APP_VERSION=1` and leave `REGISTRY=docker.io`. Start 
 `--no-build --pull never` so Compose uses only the loaded images.
 
 To ship an update, build `hamgam-landing:2`, save and load only that image, set
-`APP_VERSION=2` and start again.
+`APP_VERSION=2`, then:
+
+```bash
+docker compose up -d --no-build --pull never
+docker compose restart nginx      # nginx looks up the app's address only when it starts
+```
+
+The database lives in the `pgdata` volume and is kept across updates.
 
 #### Option B: build on the server through an Iranian registry mirror
 
