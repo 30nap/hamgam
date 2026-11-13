@@ -59,4 +59,11 @@ class PhoneNumbersTest {
         assertThat(PhoneNumbers.digitsOnly("٠٠١-٢٣٤")).isEqualTo("001234");
         assertThat(PhoneNumbers.digitsOnly(null)).isEmpty();
     }
+
+    @Test
+    void maskedNumberHidesTheMiddleDigits() {
+        assertThat(PhoneNumbers.masked(CANONICAL)).isEqualTo("۰۹۱۲ ••• ۶۷۸۹");
+        assertThat(PhoneNumbers.masked("123")).isEmpty();
+        assertThat(PhoneNumbers.masked(null)).isEmpty();
+    }
 }

@@ -2,40 +2,39 @@
 <html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head}"></head>
 <body>
-<main class="wrap">
-  <div class="brand"><span class="mark" aria-hidden="true"></span>همگام</div>
+<header class="top narrow"><div th:replace="~{fragments :: brand}"></div></header>
 
-  <section class="card">
-    <p>کدی که برات پیامک شد رو بزن.</p>
+<main class="solo">
+  <h1>کدی که برات پیامک شد رو بزن.</h1>
+  <p class="lead">کد رو به <bdi dir="ltr" th:text="${phoneMasked}">۰۹۱۲ ••• ۶۷۸۹</bdi> فرستادیم.</p>
 
-    <form th:action="@{/verify}" method="post" novalidate>
-      <input type="hidden" name="r" th:value="${requestId}">
+  <form th:action="@{/verify}" method="post" novalidate>
+    <input type="hidden" name="r" th:value="${requestId}">
 
-      <div class="err" role="alert" th:if="${error != null}">
-        <th:block th:switch="${error}">
-          <span th:case="'wrong'">کد درست نیست. دوباره امتحان کن.</span>
-          <span th:case="'expired'">مهلت این کد تموم شد. یه کد جدید بگیر.</span>
-          <span th:case="'cooldown'">همین الان برات کد فرستادیم. یه دقیقه دیگه دوباره امتحان کن.</span>
-          <span th:case="'limit'">تعداد درخواست‌ها زیاد شد. چند ساعت دیگه دوباره امتحان کن.</span>
-          <span th:case="*">نتونستیم پیامک بفرستیم. چند دقیقه دیگه دوباره امتحان کن.</span>
-        </th:block>
-      </div>
-
-      <label class="field" for="code">کد تأیید</label>
-      <input class="code" id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code"
-             maxlength="6" required autofocus>
-
-      <button class="btn" type="submit">تأیید</button>
-    </form>
-
-    <div class="quiet">
-      <form th:action="@{/resend}" method="post">
-        <input type="hidden" name="r" th:value="${requestId}">
-        <button class="link" type="submit">ارسال دوباره کد</button>
-      </form>
-      <a class="link" th:href="@{/}">تغییر شماره</a>
+    <div class="err" role="alert" th:if="${error != null}">
+      <th:block th:switch="${error}">
+        <span th:case="'wrong'">کد درست نیست. دوباره امتحان کن.</span>
+        <span th:case="'expired'">مهلت این کد تموم شد. یه کد جدید بگیر.</span>
+        <span th:case="'cooldown'">همین الان برات کد فرستادیم. یه دقیقه دیگه دوباره امتحان کن.</span>
+        <span th:case="'limit'">تعداد درخواست‌ها زیاد شد. چند ساعت دیگه دوباره امتحان کن.</span>
+        <span th:case="*">نتونستیم پیامک بفرستیم. چند دقیقه دیگه دوباره امتحان کن.</span>
+      </th:block>
     </div>
-  </section>
+
+    <label class="field" for="code">کد تأیید</label>
+    <input class="code" id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code"
+           maxlength="6" required autofocus>
+
+    <button class="btn" type="submit">تأیید</button>
+  </form>
+
+  <div class="quiet">
+    <form th:action="@{/resend}" method="post">
+      <input type="hidden" name="r" th:value="${requestId}">
+      <button class="link" type="submit">ارسال دوباره کد</button>
+    </form>
+    <a class="link" th:href="@{/}">تغییر شماره</a>
+  </div>
 
   <footer>همگام هنوز منتشر نشده. شماره‌ت فقط برای خبر دادن زمان انتشار استفاده می‌شه.</footer>
 </main>

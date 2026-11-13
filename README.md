@@ -7,8 +7,8 @@ and confirm the number with an SMS code. An admin page shows the funnel per ad s
 The page says plainly that the product is not built yet. It has no invented features,
 testimonials or user counts. Its text lives in [copy-fa.md](copy-fa.md).
 
-- Java 25, Spring Boot 4, PostgreSQL, server-rendered HTML, about 60 lines of plain JavaScript
-- **Zero requests to other hosts**: self-hosted Vazirmatn font, no CDN, no analytics script.
+- Java 25, Spring Boot 4, PostgreSQL, server-rendered HTML, about 160 lines of plain JavaScript
+- **Zero requests to other hosts**: self-hosted fonts (Vazirmatn, Lalezar), no CDN, no analytics script.
   A strict Content-Security-Policy makes the browser enforce this, and a test checks it.
 - Tracking is first-party and server-side.
 
@@ -95,6 +95,9 @@ https://YOUR-DOMAIN/?utm_source=bale&utm_medium=channel-post&utm_campaign=repric
 
 `utm_source` and `utm_medium` are stored in lower case. Visits without a tag are grouped
 under `(none)`.
+
+The thank-you page asks people to pass the link on to another seller. That link is tagged
+`utm_source=share`, so word of mouth shows up as its own row.
 
 Open `https://YOUR-DOMAIN/admin`. For each `utm_source` it shows:
 
@@ -387,7 +390,7 @@ are the result of the experiment.
 
 Before you spend money on ads, check on a real phone over mobile data:
 
-- [ ] The page opens over HTTPS and the font is Vazirmatn
+- [ ] The page opens over HTTPS, the headline is in Lalezar and the text in Vazirmatn
 - [ ] The browser's network panel shows requests to your domain only
 - [ ] An SMS code arrives and confirms; `/admin` shows the signup under the right source
 - [ ] `/admin` asks for a password; the password is not the one from `.env.example`
@@ -402,8 +405,15 @@ visitor ── CDN ── nginx ── app (Spring Boot) ── PostgreSQL
 **Form flow.** `GET /` logs the view and renders the form. `POST /signup` validates the
 phone, checks the limits, stores a hashed code and sends the SMS, then redirects to
 `/verify`. `POST /verify` checks the code and creates the signup. `POST /resend` issues a
-new code under the same limits. Everything works without JavaScript; the script only
-reports the first touch of the form and prevents double taps.
+new code under the same limits. Signing up works without JavaScript. The script reports the
+first touch of the form, prevents double taps, makes the price demo draggable, keeps the
+sign-up button on screen on phones, and adds the share button on the thank-you page.
+
+**Page design.** One stylesheet, inlined in `fragments.html`; its opening comment describes
+the look. On a phone the page is one column that ends in the form, with the button pinned
+to the bottom edge while neither the first button nor the form is visible. From 960px up
+the form sits beside the text and stays in view. The price demo under the headline uses
+made-up numbers and says so (see [copy-fa.md](copy-fa.md)).
 
 **Phone numbers.** `۰۹۱۲…`, `٠٩١٢…`, `+98 912…`, `0098912…` and `912…` all become
 `09xxxxxxxxx`. Anything else is rejected.
@@ -428,7 +438,7 @@ telling people when Hamgam is ready. Protect `/admin`, `.env` and the backups ac
 ```text
 copy-fa.md                              page text (source of truth) + list of added UI strings
 src/main/resources/templates/           landing, verify, done, admin pages
-src/main/resources/static/              app.js, Vazirmatn fonts + OFL licence
+src/main/resources/static/              app.js, Vazirmatn and Lalezar fonts + OFL licences
 src/main/resources/db/migration/        database schema (Flyway)
 src/main/java/ir/hamgam/landing/
   phone/PhoneNumbers.java               normalization
@@ -444,6 +454,6 @@ Dockerfile, docker-compose.yml, .env.example
 
 ### Font licence
 
-Vazirmatn is copyright The Vazirmatn Project Authors and is used under the SIL Open Font
-License 1.1. The licence text ships with the fonts in
-`src/main/resources/static/fonts/OFL.txt`.
+Vazirmatn is copyright The Vazirmatn Project Authors and Lalezar is copyright The Lalezar
+Project Authors. Both are used under the SIL Open Font License 1.1. The licence texts ship
+with the fonts in `src/main/resources/static/fonts/` (`OFL.txt` and `OFL-Lalezar.txt`).

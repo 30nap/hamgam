@@ -64,6 +64,23 @@ public final class PhoneNumbers {
         return digits.toString();
     }
 
+    /**
+     * A normalized number for display with its middle digits hidden, in Persian digits:
+     * {@code 09123456789} becomes {@code ۰۹۱۲ ••• ۶۷۸۹}.
+     */
+    public static String masked(String normalized) {
+        if (normalized == null || normalized.length() != 11) {
+            return "";
+        }
+        String shown = normalized.substring(0, 4) + " ••• " + normalized.substring(7);
+        StringBuilder persian = new StringBuilder(shown.length());
+        for (int i = 0; i < shown.length(); i++) {
+            char c = shown.charAt(i);
+            persian.append(c >= '0' && c <= '9' ? (char) ('۰' + (c - '0')) : c);
+        }
+        return persian.toString();
+    }
+
     private static int toAsciiDigit(char c) {
         if (c >= '0' && c <= '9') {
             return c - '0';

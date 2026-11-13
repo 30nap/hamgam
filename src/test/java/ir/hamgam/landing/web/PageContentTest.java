@@ -88,6 +88,22 @@ class PageContentTest extends IntegrationTest {
         assertThat(html).doesNotContainPattern("<input[^>]*\\schecked");
     }
 
+    @Test
+    void codePageShowsTheNumberWithItsMiddleDigitsHidden() throws Exception {
+        String html = renderPages().get("verify");
+
+        assertThat(html).contains("۰۹۱۲ ••• ۶۷۸۹");
+        assertThat(html).doesNotContain("09123456789").doesNotContain("۰۹۱۲۳۴۵۶۷۸۹");
+    }
+
+    /** The demo must not look like a live rate: it is labelled as made up, next to the numbers. */
+    @Test
+    void priceDemoSaysItsNumbersAreNotReal() throws Exception {
+        String html = renderPages().get("landing");
+
+        assertThat(html).contains("نرخ دلار (فرضی)").contains("این فقط یه نمونه‌ست و عددهاش واقعی نیستن.");
+    }
+
     private Map<String, String> renderPages() throws Exception {
         Map<String, String> pages = new LinkedHashMap<>();
         MvcResult landing = mvc.perform(get("/").header("User-Agent", BROWSER)).andExpect(status().isOk()).andReturn();

@@ -118,7 +118,7 @@ public class LandingController {
         if (pending.get().consumedAt() != null) {
             return "redirect:/done";
         }
-        return verifyView(request, model, pending.get().id(), null);
+        return verifyView(request, model, pending.get(), null);
     }
 
     @PostMapping("/verify")
@@ -133,8 +133,8 @@ public class LandingController {
         return switch (result) {
             case OK, ALREADY_DONE -> "redirect:/done";
             case NOT_FOUND -> "redirect:/";
-            case WRONG -> verifyView(request, model, id, "wrong");
-            case EXPIRED -> verifyView(request, model, id, "expired");
+            case WRONG -> verifyAgain(request, model, id, "wrong");
+            case EXPIRED -> verifyAgain(request, model, id, "expired");
         };
     }
 
@@ -154,9 +154,9 @@ public class LandingController {
         return switch (result) {
             case Sent sent -> "redirect:/verify?r=" + sent.requestId();
             case Limited limited when limited.reason() == LimitReason.PHONE_COOLDOWN ->
-                    verifyView(request, model, old.id(), "cooldown");
-            case Limited limited -> verifyView(request, model, old.id(), "limit");
-            case SendFailed failed -> verifyView(request, model, old.id(), "sms");
+                    verifyView(request, model, old, "cooldown");
+            case Limited limited -> verifyView(request, model, old, "limit");
+            case SendFailed failed -> verifyView(request, model, old, "sms");
         };
     }
 
@@ -191,11 +191,20 @@ public class LandingController {
         return "landing";
     }
 
-    private String verifyView(HttpServletRequest request, Model model, UUID requestId, String error) {
+    private String verifyView(HttpServletRequest request, Model model, OtpRequest pending, String error) {
         loadCsrfToken(request);
-        model.addAttribute("requestId", requestId.toString());
+        model.addAttribute("requestId", pending.id().toString());
+        // Lets the visitor spot a mistyped number. Masked, because the page URL ends up in browser history.
+        model.addAttribute("phoneMasked", PhoneNumbers.masked(pending.phone()));
         model.addAttribute("error", error);
         return "verify";
+    }
+
+    /** Shows the code page again after a failed attempt. */
+    private String verifyAgain(HttpServletRequest request, Model model, UUID requestId, String error) {
+        return otp.find(requestId)
+                .map(pending -> verifyView(request, model, pending, error))
+                .orElse("redirect:/");
     }
 
     /**

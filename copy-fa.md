@@ -97,3 +97,32 @@ tone, and promise nothing about the product. Edit them freely in the templates
 | Resend button | ارسال دوباره کد |
 | Back to the form | تغییر شماره |
 | Suggested SMS template (set in the Kavenegar panel) | کد تأیید همگام: %token |
+| Hint under "کجا می‌فروشی؟" | هر چندتا که هست رو انتخاب کن. |
+| Hint under the price question | جواب دادنش اختیاریه. |
+| Under the form button, before the footer sentence | بعدش یه کد تأیید برات پیامک می‌شه. |
+| Code page, under the heading (number is masked) | کد رو به ۰۹۱۲ ••• ۶۷۸۹ فرستادیم. |
+| Thank-you page, invitation to pass the link on | همکاری داری که اون هم هر روز قیمت عوض می‌کنه؟ لینک همگام رو براش بفرست. |
+| Thank-you page, button where the phone can share | فرستادن لینک |
+| Thank-you page, button where it can only copy | کپی لینک |
+| Thank-you page, after copying | لینک کپی شد. |
+
+## Price demo (illustration, NOT part of the original copy)
+
+The block under the first button shows the headline with made-up numbers: a dollar rate the
+visitor can drag, and three example products whose prices follow it. It only illustrates
+what the copy already says (price = dollar rate + your margin, rounded). It is labelled as
+hypothetical twice, and `PageContentTest` fails if those labels are removed. If you change
+a product, change its `data-usd` / `data-margin` and the numbers next to it in
+`landing.html` together (price = dollars x rate x (1 + margin), rounded to 1,000 toman;
+yesterday's rate is 100,000 and the starting rate is 104,000).
+
+| Where | Text |
+|---|---|
+| Rate label | نرخ دلار (فرضی) |
+| Unit | تومن |
+| Change since yesterday | ۴٪ بالاتر از دیروز |
+| Hint under the slider | نرخ رو جابه‌جا کن و ببین قیمت‌ها چی می‌شن. |
+| Example products | قاب گوشی، هندزفری بلوتوث، پاوربانک |
+| How a price is built | ۵ دلار + ۲۰٪ سود |
+| Yesterday's price | دیروز ۶۰۰٬۰۰۰ |
+| Note under the block | این فقط یه نمونه‌ست و عددهاش واقعی نیستن. |

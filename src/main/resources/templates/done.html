@@ -2,12 +2,27 @@
 <html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: head}"></head>
 <body>
-<main class="wrap">
-  <div class="brand"><span class="mark" aria-hidden="true"></span>همگام</div>
+<header class="top narrow"><div th:replace="~{fragments :: brand}"></div></header>
 
-  <p class="success" role="status">ثبت شد! همگام که آماده شد، اول از همه به تو خبر می‌دیم.</p>
+<main class="solo">
+  <svg class="stamp" viewBox="0 0 72 72" aria-hidden="true">
+    <path d="M22 37l10 10 19-21" fill="none" stroke="#0d2b21" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <h1>ثبت شد! همگام که آماده شد، اول از همه به تو خبر می‌دیم.</h1>
+
+  <!--
+    Shown by app.js only where the browser can share or copy. The link carries utm_source=share,
+    so people who arrive through it get their own row on the admin page.
+  -->
+  <section class="share" id="share" hidden data-path="/?utm_source=share"
+           data-share="فرستادن لینک" data-copy="کپی لینک" data-copied="لینک کپی شد.">
+    <p>همکاری داری که اون هم هر روز قیمت عوض می‌کنه؟ لینک همگام رو براش بفرست.</p>
+    <button class="btn" type="button"></button>
+    <p role="status"></p>
+  </section>
 
   <footer>همگام هنوز منتشر نشده. شماره‌ت فقط برای خبر دادن زمان انتشار استفاده می‌شه.</footer>
 </main>
+<script th:src="@{/js/app.js}" defer></script>
 </body>
 </html>
